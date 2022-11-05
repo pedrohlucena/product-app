@@ -4,14 +4,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Home - JSPs</title>
-<%@ include file="../snippets/header.jsp"%>
+<title>Home - JSPs</title>	
+<jsp:include page="/snippets/header.jsp"></jsp:include>
 </head>
 <body>
-	<%@ include file="../snippets/navbar.jsp"%>	
-	<div class="container">
-		<h1>JSP - Java ServerPages</h1>
+	<jsp:include page="/snippets/navbar.jsp"></jsp:include>
+	<div class="container-fluid">
+		<h1>Cadastro de produto</h1>
 	</div>
-	<%@ include file="../snippets/footer.jsp"%>
+	<jsp:include page="/snippets/footer.jsp"></jsp:include>
 </body>
 </html>
