@@ -5,13 +5,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Home - JSPs</title>
-<%@ include file="header.jsp"%>
+<%@ include file="../snippets/header.jsp"%>
 </head>
 <body>
-	<%@ include file="navbar.jsp"%>	
+	<%@ include file="../snippets/navbar.jsp"%>	
 	<div class="container">
 		<h1>JSP - Java ServerPages</h1>
 	</div>
-	<%@ include file="footer.jsp"%>
+	<%@ include file="../snippets/footer.jsp"%>
 </body>
 </html>
