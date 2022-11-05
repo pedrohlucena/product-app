@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Home - JSPs</title>	
+<title>Cadastro de produto</title>	
 <jsp:include page="/snippets/header.jsp"></jsp:include>
 </head>
 <body>
@@ -12,7 +12,7 @@
 	<div class="container-fluid">
 		<h1 class="mt-2">Cadastro de produto</h1>
 		
-		<form action="produto" method="post">
+		<form action="product" method="post">
         <div class="form-group">
           <label for="id-nome">Nome</label>
           <input type="text" name="nome" id="id-nome" class="form-control mb-3">
