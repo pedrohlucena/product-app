@@ -27,7 +27,7 @@
 					<td>${product.name}</td>
 					<td>${product.quantity} ${(product.quantity == 1) ? "unidade" : "unidades"}</td>
 					<td>
-						<fmt:formatNumber value="${product.price}" minFractionDigits="2" type="currency"/>
+						<fmt:formatNumber value="${product.price}" type="currency" minFractionDigits="2" maxFractionDigits="2"/>
 					</td>
 					<td>
 						<fmt:formatDate pattern="dd/MM/yyyy" value="${product.expirationDate}" />
