@@ -20,13 +20,17 @@
 				<th>Nome</th>
 				<th>Quantidade</th>
 				<th>Valor</th>
+				<th>Data de validade</th>
 			</tr>
-			<c:forEach items="${products }" var="product">
+			<c:forEach items="${products}" var="product">
 				<tr>
 					<td>${product.name}</td>
 					<td>${product.quantity} unidades</td>
 					<td>
 						<fmt:formatNumber value="${product.price}" minFractionDigits="2" type="currency"/>
+					</td>
+					<td>
+						<fmt:formatDate pattern="dd/MM/yyyy" value="${product.expirationDate}" />
 					</td>
 				</tr>
 			</c:forEach>

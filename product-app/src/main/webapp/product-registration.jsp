@@ -32,6 +32,10 @@
 				<label for="id-valor">Valor</label> <input type="text" name="value"
 					id="id-valor" class="form-control mb-3">
 			</div>
+			<div class="form-group">
+				<label for="id-data-validade">Data de validade</label> <input type="date" name="expiration-date"
+					id="id-data-validade" class="form-control mb-3">
+			</div>
 			<input type="submit" value="Salvar" class="btn btn-success">
 		</form>
 	</div>
