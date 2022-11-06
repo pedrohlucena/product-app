@@ -25,7 +25,7 @@
 			<c:forEach items="${products}" var="product">
 				<tr>
 					<td>${product.name}</td>
-					<td>${product.quantity} unidades</td>
+					<td>${product.quantity} ${(product.quantity == 1) ? "unidade" : "unidades"}</td>
 					<td>
 						<fmt:formatNumber value="${product.price}" minFractionDigits="2" type="currency"/>
 					</td>
