@@ -1,4 +1,4 @@
-package br.com.fiap.controller;
+package br.com.fiap.store.controller;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.fiap.bean.Product;
+import br.com.fiap.store.bean.Product;
 
 @WebServlet("/product")
 public class ProductServlet extends HttpServlet {

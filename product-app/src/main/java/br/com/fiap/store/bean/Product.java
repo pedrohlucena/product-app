@@ -1,4 +1,4 @@
-package br.com.fiap.bean;
+package br.com.fiap.store.bean;
 
 import java.io.Serializable;
 import java.util.Date;
