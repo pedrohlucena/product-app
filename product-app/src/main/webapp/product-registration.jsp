@@ -17,6 +17,10 @@
 		<c:if test="${not empty message}">
 			<div class="alert alert-success">${message}</div>
 		</c:if>
+		
+		<c:if test="${not empty error}">
+			<div class="alert alert-danger">${error}</div>
+		</c:if>
 
 		<form action="product" method="post">
 			<div class="form-group">
@@ -30,6 +34,10 @@
 			<div class="form-group">
 				<label for="id-valor">Valor</label> <input type="text" name="value"
 					id="id-valor" class="form-control mb-3">
+			</div>
+			<div class="form-group">
+				<label for="id-data-fabricacao">Data de fabricação</label> <input type="date" name="manufacturing-date"
+					id="id-data-fabricacao" class="form-control mb-3">
 			</div>
 			<input type="submit" value="Salvar" class="btn btn-primary">
 		</form>
