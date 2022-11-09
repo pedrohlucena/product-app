@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1" import="java.sql.Date"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -20,7 +20,7 @@
 				<th>Nome</th>
 				<th>Quantidade</th>
 				<th>Valor</th>
-				<th>Data de validade</th>
+				<th>Data de fabricação</th>
 			</tr>
 			<c:forEach items="${products}" var="product">
 				<tr>
@@ -30,7 +30,7 @@
 						<fmt:formatNumber value="${product.price}" type="currency" minFractionDigits="2" maxFractionDigits="2"/>
 					</td>
 					<td>
-						<fmt:formatDate pattern="dd/MM/yyyy" value="${product.expirationDate}" />
+						<fmt:formatDate pattern="dd/MM/yyyy" value="${product.manufacturingDate.time}" />
 					</td>
 				</tr>
 			</c:forEach>
