@@ -10,7 +10,7 @@
           <a class="nav-link active" aria-current="page" href="product-registration.jsp">Cadastro</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="product">Produtos</a>
+          <a class="nav-link" href="product?action=list">Produtos</a>
         </li>
       </ul>
       <form class="d-flex" role="search">
