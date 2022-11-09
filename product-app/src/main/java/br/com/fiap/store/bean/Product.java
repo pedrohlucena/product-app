@@ -15,6 +15,15 @@ public class Product implements Serializable {
 	
 	public Product() {}
 	
+	public Product(String name, int quantity, double price, Calendar manufacturingDate, Calendar expirationDate) {
+		super();
+		this.name = name;
+		this.quantity = quantity;
+		this.price = price;
+		this.manufacturingDate = manufacturingDate;
+		this.expirationDate = expirationDate;
+	}
+	
 	public Product(int code, String name, int quantity, double price, Calendar manufacturingDate, Calendar expirationDate) {
 		super();
 		this.code = code;
