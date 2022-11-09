@@ -21,7 +21,7 @@ public class ConnectionManager {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 
 			connection = DriverManager.getConnection("jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL", "user",
-					"password");
+					"pass");
 
 			return connection;
 		} catch (SQLException e) {

@@ -22,15 +22,13 @@ public class OracleProductDAO implements ProductDAO {
 
 		try {
 			connection = ConnectionManager.getInstance().getConnection();
-			String sql = "INSERT INTO T_Product (cd_produto, nm_produto, qt_produto, vl_produto, dt_fabricacao, dt_validade) VALUES (SQ_T_PRODUTO.nextval, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO T_PRODUTO (cd_produto, nm_produto, qt_produto, vl_produto, dt_fabricacao) VALUES (SQ_T_PRODUTO.nextval, ?, ?, ?, ?)";
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, product.getName());
 			stmt.setInt(2, product.getQuantity());
 			stmt.setDouble(3, product.getPrice());
 			java.sql.Date manufacturingDate = new java.sql.Date(product.getManufacturingDate().getTimeInMillis());
-			java.sql.Date expirationDate = new java.sql.Date(product.getExpirationDate().getTimeInMillis());
 			stmt.setDate(4, manufacturingDate);
-			stmt.setDate(5, expirationDate);
 
 			stmt.executeUpdate();
 		} catch (SQLException e) {
@@ -52,16 +50,14 @@ public class OracleProductDAO implements ProductDAO {
 
 		try {
 			connection = ConnectionManager.getInstance().getConnection();
-			String sql = "UPDATE T_PRODUTO SET nm_produto = ?, qt_produto = ?, vl_produto = ?, dt_fabricacao = ?, dt_validade = ?  WHERE cd_produto = ?";
+			String sql = "UPDATE T_PRODUTO SET nm_produto = ?, qt_produto = ?, vl_produto = ?, dt_fabricacao = ?  WHERE cd_produto = ?";
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, product.getName());
 			stmt.setInt(2, product.getQuantity());
 			stmt.setDouble(3, product.getPrice());
 			java.sql.Date manufacturingDate = new java.sql.Date(product.getManufacturingDate().getTimeInMillis());
-			java.sql.Date expirationDate = new java.sql.Date(product.getExpirationDate().getTimeInMillis());
 			stmt.setDate(4, manufacturingDate);
-			stmt.setDate(5, expirationDate);
-			stmt.setInt(6, product.getCode());
+			stmt.setInt(5, product.getCode());
 
 			stmt.executeUpdate();
 		} catch (SQLException e) {
@@ -118,14 +114,11 @@ public class OracleProductDAO implements ProductDAO {
 				String name = rs.getString("nm_produto");
 				int quantity = rs.getInt("qt_produto");
 				double price = rs.getDouble("vl_produto");
-				java.sql.Date manufacturingDateResponse = rs.getDate("dt_fabricao");
-				java.sql.Date expirationDateResponse = rs.getDate("dt_validade");
+				java.sql.Date manufacturingDateResponse = rs.getDate("dt_fabricacao");
 				Calendar manufacturingDate = Calendar.getInstance();
-				Calendar expirationDate = Calendar.getInstance();
 				manufacturingDate.setTimeInMillis(manufacturingDateResponse.getTime());
-				expirationDate.setTimeInMillis(expirationDateResponse.getTime());
 				
-				product = new Product(code, name, quantity, price, manufacturingDate, expirationDate);
+				product = new Product(code, name, quantity, price, manufacturingDate);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -156,14 +149,11 @@ public class OracleProductDAO implements ProductDAO {
 				String name = rs.getString("nm_produto");
 				int quantity = rs.getInt("qt_produto");
 				double price = rs.getDouble("vl_produto");
-				java.sql.Date manufacturingDateResponse = rs.getDate("dt_fabricao");
-				java.sql.Date expirationDateResponse = rs.getDate("dt_validade");
+				java.sql.Date manufacturingDateResponse = rs.getDate("dt_fabricacao");
 				Calendar manufacturingDate = Calendar.getInstance();
-				Calendar expirationDate = Calendar.getInstance();
 				manufacturingDate.setTimeInMillis(manufacturingDateResponse.getTime());
-				expirationDate.setTimeInMillis(expirationDateResponse.getTime());
 				
-				Product product = new Product(code, name, quantity, price, manufacturingDate, expirationDate);
+				Product product = new Product(code, name, quantity, price, manufacturingDate);
 				
 				list.add(product);
 			}

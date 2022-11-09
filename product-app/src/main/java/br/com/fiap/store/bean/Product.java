@@ -11,27 +11,24 @@ public class Product implements Serializable {
 	private int quantity;
 	private double price;
 	private Calendar manufacturingDate;
-	private Calendar expirationDate;
 	
 	public Product() {}
 	
-	public Product(String name, int quantity, double price, Calendar manufacturingDate, Calendar expirationDate) {
+	public Product(String name, int quantity, double price, Calendar manufacturingDate) {
 		super();
 		this.name = name;
 		this.quantity = quantity;
 		this.price = price;
 		this.manufacturingDate = manufacturingDate;
-		this.expirationDate = expirationDate;
 	}
 	
-	public Product(int code, String name, int quantity, double price, Calendar manufacturingDate, Calendar expirationDate) {
+	public Product(int code, String name, int quantity, double price, Calendar manufacturingDate) {
 		super();
 		this.code = code;
 		this.name = name;
 		this.quantity = quantity;
 		this.price = price;
 		this.manufacturingDate = manufacturingDate;
-		this.expirationDate = expirationDate;
 	}
 	
 	public int getCode() {
@@ -50,14 +47,6 @@ public class Product implements Serializable {
 		this.manufacturingDate = manufacturingDate;
 	}
 
-	public Calendar getExpirationDate() {
-		return expirationDate;
-	}
-
-	public void setExpirationDate(Calendar expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-
 	public int getQuantity() {
 		return quantity;
 	}
@@ -71,6 +60,9 @@ public class Product implements Serializable {
 	}
 	public double getPrice() {
 		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
 	}
 	public void setName(String name) {
 		this.name = name;
