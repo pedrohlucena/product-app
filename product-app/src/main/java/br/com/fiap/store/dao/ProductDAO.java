@@ -9,6 +9,6 @@ public interface ProductDAO {
 	void save(Product product) throws DBException;
 	void update(Product product) throws DBException;
 	void remove(int code) throws DBException;
-	Product save(int id);
+	Product fetchById(int id);
 	List<Product> list();
 }
