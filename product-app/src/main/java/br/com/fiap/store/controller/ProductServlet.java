@@ -1,10 +1,8 @@
 package br.com.fiap.store.controller;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -14,20 +12,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.fiap.store.bean.Product;
+import br.com.fiap.store.dao.ProductDAO;
+import br.com.fiap.store.exception.DBException;
+import br.com.fiap.store.factory.DAOFactory;
 
 @WebServlet("/product")
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	private static List<Product> list = new ArrayList<Product>();
-
-	public ProductServlet() {
-		super();
+	
+	private ProductDAO dao;
+	
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		dao = DAOFactory.getProdutoDAO();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.setAttribute("products", list);
+		List<Product> productList = dao.list();
+		request.setAttribute("products", productList);
 		request.getRequestDispatcher("product-list.jsp").forward(request, response);
 	}
 
@@ -37,18 +41,25 @@ public class ProductServlet extends HttpServlet {
 			String name = request.getParameter("name");
 			int quantity = Integer.parseInt(request.getParameter("quantity"));
 			double value = Double.parseDouble(request.getParameter("value"));
-
+			
+			System.out.println(request.getParameter("manufacturing-date"));
+			
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			Date expirationDate = formatter.parse(request.getParameter("expiration-date"));
+			Calendar manufacturingDate = Calendar.getInstance();
+			manufacturingDate.setTime(formatter.parse(request.getParameter("manufacturing-date"))); 
 					
-			Product product = new Product(name, quantity, value, expirationDate);
-			list.add(product);
+			Product product = new Product(name, quantity, value, manufacturingDate);
+			
+			dao.save(product);
 			
 			request.setAttribute("message", "Produto cadastrado!");
-			request.getRequestDispatcher("product-registration.jsp").forward(request, response);
-		} catch (ParseException e) {
+		} catch (DBException e) {
 			e.printStackTrace();
-		}
-
+			request.setAttribute("error", "Erro ao cadastrar o produto.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("error", "Por favor, valide os dados.");
+		} 
+		request.getRequestDispatcher("product-registration.jsp").forward(request, response);
 	}
 }
