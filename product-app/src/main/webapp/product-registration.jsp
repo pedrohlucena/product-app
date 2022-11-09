@@ -11,15 +11,14 @@
 </head>
 <body>
 	<jsp:include page="navbar.jsp"></jsp:include>
-	<div class="container-fluid">
+	<div class="container">
 		<h1 class="mt-2">Cadastro de produto</h1>
 
 		<c:if test="${not empty message}">
 			<div class="alert alert-success">${message}</div>
 		</c:if>
 
-		<form action="<%=(request.getContextPath() + "/product")%>"
-			method="post">
+		<form action="product" method="post">
 			<div class="form-group">
 				<label for="id-nome">Nome</label> <input type="text" name="name"
 					id="id-nome" class="form-control mb-3">
@@ -32,11 +31,7 @@
 				<label for="id-valor">Valor</label> <input type="text" name="value"
 					id="id-valor" class="form-control mb-3">
 			</div>
-			<div class="form-group">
-				<label for="id-data-validade">Data de validade</label> <input type="date" name="expiration-date"
-					id="id-data-validade" class="form-control mb-3">
-			</div>
-			<input type="submit" value="Salvar" class="btn btn-success">
+			<input type="submit" value="Salvar" class="btn btn-primary">
 		</form>
 	</div>
 	<jsp:include page="footer.jsp"></jsp:include>
