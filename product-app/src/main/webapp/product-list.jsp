@@ -13,14 +13,18 @@
 	<fmt:setLocale value="pt-BR"/>
 	
 	<jsp:include page="navbar.jsp"></jsp:include>
-	<div class="container-fluid ps-0 pe-0">
-		<h1 class="mt-2 ms-1">Produtos</h1>
+	<div class="container">
+		<h1 class="mt-2">Produtos</h1>
+		
+		<jsp:include page="callback-message.jsp"></jsp:include>
+		
 		<table class="table table-striped">
 			<tr>
 				<th>Nome</th>
 				<th>Quantidade</th>
 				<th>Valor</th>
 				<th>Data de fabricação</th>
+				<th></th>
 			</tr>
 			<c:forEach items="${products}" var="product">
 				<tr>
@@ -32,6 +36,13 @@
 					<td>
 						<fmt:formatDate pattern="dd/MM/yyyy" value="${product.manufacturingDate.time}" />
 					</td>
+					<td>
+						<c:url value="product" var="link">
+							<c:param name="code" value="${product.code}"/>
+							<c:param name="action" value="open-edition-form"/>
+						</c:url>
+						<a href="${link}">Editar</a>
+					</td>		
 				</tr>
 			</c:forEach>
 		</table>

@@ -19,9 +19,9 @@ import br.com.fiap.store.factory.DAOFactory;
 @WebServlet("/product")
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	private ProductDAO dao;
-	
+
 	@Override
 	public void init() throws ServletException {
 		super.init();
@@ -30,28 +30,49 @@ public class ProductServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		List<Product> productList = dao.list();
-		request.setAttribute("products", productList);
-		request.getRequestDispatcher("product-list.jsp").forward(request, response);
+		String action = request.getParameter("action");
+
+		switch (action) {
+		case "list":
+			list(request, response);
+			break;
+		case "open-edition-form":
+			int id = Integer.parseInt(request.getParameter("code"));
+			Product productToBeUpdated = dao.fetchById(id);
+			request.setAttribute("product", productToBeUpdated);
+			request.getRequestDispatcher("product-edit.jsp").forward(request, response);
+			break;
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String action = request.getParameter("action");
+		
+		switch (action) {
+		case "save":
+			save(request, response);
+			break;
+		case "edit":
+			update(request, response);
+			break;
+		}
+	}
+	
+	private void save(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
 			String name = request.getParameter("name");
 			int quantity = Integer.parseInt(request.getParameter("quantity"));
 			double value = Double.parseDouble(request.getParameter("value"));
-			
-			System.out.println(request.getParameter("manufacturing-date"));
-			
+
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar manufacturingDate = Calendar.getInstance();
-			manufacturingDate.setTime(formatter.parse(request.getParameter("manufacturing-date"))); 
-					
+			manufacturingDate.setTime(formatter.parse(request.getParameter("manufacturing-date")));
+
 			Product product = new Product(name, quantity, value, manufacturingDate);
-			
+
 			dao.save(product);
-			
 			request.setAttribute("message", "Produto cadastrado!");
 		} catch (DBException e) {
 			e.printStackTrace();
@@ -59,7 +80,46 @@ public class ProductServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("error", "Por favor, valide os dados.");
-		} 
+		}
 		request.getRequestDispatcher("product-registration.jsp").forward(request, response);
+	}
+
+	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+			System.out.println("entrei no if");
+			String name = request.getParameter("name");
+			int quantity = Integer.parseInt(request.getParameter("quantity"));
+			double value = Double.parseDouble(request.getParameter("value"));
+
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			Calendar manufacturingDate = Calendar.getInstance();
+			manufacturingDate.setTime(formatter.parse(request.getParameter("manufacturing-date")));
+
+			int code = Integer.parseInt(request.getParameter("code"));
+			
+			Product productToBeEdited = dao.fetchById(code);
+
+			productToBeEdited.setName(name);
+			productToBeEdited.setQuantity(quantity);
+			productToBeEdited.setPrice(value);
+			productToBeEdited.setManufacturingDate(manufacturingDate);
+
+			dao.update(productToBeEdited);
+			request.setAttribute("message", "Produto atualizado!");
+		} catch (DBException e) {
+			e.printStackTrace();
+			request.setAttribute("error", "Erro ao atualizar o produto.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("error", "Por favor, valide os dados.");
+		}
+		
+		list(request, response);
+	}
+	
+	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<Product> productList = dao.list();
+		request.setAttribute("products", productList);
+		request.getRequestDispatcher("product-list.jsp").forward(request, response);
 	}
 }

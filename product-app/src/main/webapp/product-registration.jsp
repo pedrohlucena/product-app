@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,15 +12,10 @@
 	<div class="container">
 		<h1 class="mt-2">Cadastro de produto</h1>
 
-		<c:if test="${not empty message}">
-			<div class="alert alert-success">${message}</div>
-		</c:if>
-		
-		<c:if test="${not empty error}">
-			<div class="alert alert-danger">${error}</div>
-		</c:if>
+		<jsp:include page="callback-message.jsp"></jsp:include>
 
 		<form action="product" method="post">
+			<input type="hidden" name="action" value="save" > 
 			<div class="form-group">
 				<label for="id-nome">Nome</label> <input type="text" name="name"
 					id="id-nome" class="form-control mb-3">
