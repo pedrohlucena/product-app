@@ -88,8 +88,9 @@ public class ProductServlet extends HttpServlet {
 	}
 
 	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int code = Integer.parseInt(request.getParameter("code"));
+		Product productToBeEdited = dao.fetchById(code);
 		try {
-			System.out.println("entrei no if");
 			String name = request.getParameter("name");
 			int quantity = Integer.parseInt(request.getParameter("quantity"));
 			double value = Double.parseDouble(request.getParameter("value"));
@@ -98,10 +99,6 @@ public class ProductServlet extends HttpServlet {
 			Calendar manufacturingDate = Calendar.getInstance();
 			manufacturingDate.setTime(formatter.parse(request.getParameter("manufacturing-date")));
 
-			int code = Integer.parseInt(request.getParameter("code"));
-			
-			Product productToBeEdited = dao.fetchById(code);
-
 			productToBeEdited.setName(name);
 			productToBeEdited.setQuantity(quantity);
 			productToBeEdited.setPrice(value);
@@ -109,15 +106,18 @@ public class ProductServlet extends HttpServlet {
 
 			dao.update(productToBeEdited);
 			request.setAttribute("message", "Produto atualizado!");
+			list(request, response);
 		} catch (DBException e) {
 			e.printStackTrace();
 			request.setAttribute("error", "Erro ao atualizar o produto.");
+			request.setAttribute("product", productToBeEdited);
+			request.getRequestDispatcher("product-edit.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("error", "Por favor, valide os dados.");
+			request.setAttribute("product", productToBeEdited);
+			request.getRequestDispatcher("product-edit.jsp").forward(request, response);
 		}
-		
-		list(request, response);
 	}
 	
 	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
