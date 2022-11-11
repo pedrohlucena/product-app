@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import="java.sql.Date"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta charset="UTF-8">
 <title>Listagem de produtos</title>
 <%@ include file="header.jsp"%>
 </head>
@@ -23,7 +23,7 @@
 				<th>Nome</th>
 				<th>Quantidade</th>
 				<th>Valor</th>
-				<th>Data de fabricação</th>
+				<th>Data de fabricaÃ§Ã£o</th>
 				<th></th>
 			</tr>
 			<c:forEach items="${products}" var="product">
@@ -52,13 +52,14 @@
 			</c:forEach>
 		</table>
 	</div>
+	
 	<!-- Modal -->
 	<div class="modal fade" id="deleteModal" tabindex="-1"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">Confirmação</h1>
+					<h1 class="modal-title fs-5" id="exampleModalLabel">ConfirmaÃ§Ã£o</h1>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
@@ -75,6 +76,7 @@
 			</div>
 		</div>
 	</div>
+	
 	<%@ include file="footer.jsp"%>
 </body>
 </html>
