@@ -56,6 +56,9 @@ public class ProductServlet extends HttpServlet {
 		case "edit":
 			update(request, response);
 			break;
+		case "delete":
+			delete(request, response);
+			break;
 		}
 	}
 	
@@ -121,5 +124,17 @@ public class ProductServlet extends HttpServlet {
 		List<Product> productList = dao.list();
 		request.setAttribute("products", productList);
 		request.getRequestDispatcher("product-list.jsp").forward(request, response);
+	}
+	
+	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int id = Integer.parseInt(request.getParameter("code"));
+		try {
+			dao.remove(id);
+			request.setAttribute("message", "Produto removido!");
+		} catch (DBException e) {
+			e.printStackTrace();
+			request.setAttribute("error", "Erro ao remover o produto.");
+		}
+		list(request, response);
 	}
 }
