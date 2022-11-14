@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import br.com.fiap.store.bean.Category;
 import br.com.fiap.store.bean.Product;
 import br.com.fiap.store.dao.ProductDAO;
 import br.com.fiap.store.exception.DBException;
@@ -22,13 +23,14 @@ public class OracleProductDAO implements ProductDAO {
 
 		try {
 			connection = ConnectionManager.getInstance().getConnection();
-			String sql = "INSERT INTO T_PRODUTO (cd_produto, nm_produto, qt_produto, vl_produto, dt_fabricacao) VALUES (SQ_T_PRODUTO.nextval, ?, ?, ?, ?)";
+			String sql = "INSERT INTO T_PRODUTO (cd_produto, nm_produto, qt_produto, vl_produto, dt_fabricacao, cd_categoria) VALUES (SQ_T_PRODUTO.nextval, ?, ?, ?, ?, ?)";
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, product.getName());
 			stmt.setInt(2, product.getQuantity());
 			stmt.setDouble(3, product.getPrice());
 			java.sql.Date manufacturingDate = new java.sql.Date(product.getManufacturingDate().getTimeInMillis());
 			stmt.setDate(4, manufacturingDate);
+			stmt.setInt(5, product.getCategory().getCode());
 
 			stmt.executeUpdate();
 		} catch (SQLException e) {
@@ -50,14 +52,15 @@ public class OracleProductDAO implements ProductDAO {
 
 		try {
 			connection = ConnectionManager.getInstance().getConnection();
-			String sql = "UPDATE T_PRODUTO SET nm_produto = ?, qt_produto = ?, vl_produto = ?, dt_fabricacao = ?  WHERE cd_produto = ?";
+			String sql = "UPDATE T_PRODUTO SET nm_produto = ?, qt_produto = ?, vl_produto = ?, dt_fabricacao = ?, cd_categoria = ?  WHERE cd_produto = ?";
 			stmt = connection.prepareStatement(sql);
 			stmt.setString(1, product.getName());
 			stmt.setInt(2, product.getQuantity());
 			stmt.setDouble(3, product.getPrice());
 			java.sql.Date manufacturingDate = new java.sql.Date(product.getManufacturingDate().getTimeInMillis());
 			stmt.setDate(4, manufacturingDate);
-			stmt.setInt(5, product.getCode());
+			stmt.setInt(5, product.getCategory().getCode());
+			stmt.setInt(6, product.getCode());
 
 			stmt.executeUpdate();
 		} catch (SQLException e) {
@@ -100,12 +103,16 @@ public class OracleProductDAO implements ProductDAO {
 	
 	@Override
 	public Product fetchById(int id) {
-		Product product = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
+		Product product = null;
 		try {
 			connection = ConnectionManager.getInstance().getConnection();
-			stmt = connection.prepareStatement("SELECT * FROM T_PRODUTO WHERE cd_produto = ?");
+			String sql = "SELECT * FROM T_PRODUTO P INNER JOIN T_CATEGORIA C " +
+						 "ON (P.cd_categoria = C.cd_categoria)" +
+						 "WHERE P.cd_produto = ?";
+						 
+			stmt = connection.prepareStatement(sql);
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 
@@ -118,7 +125,13 @@ public class OracleProductDAO implements ProductDAO {
 				Calendar manufacturingDate = Calendar.getInstance();
 				manufacturingDate.setTimeInMillis(manufacturingDateResponse.getTime());
 				
+				int categoryCode = rs.getInt("cd_categoria");
+				String categoryName = rs.getString("nm_categoria");
+			
+				Category productCategory = new Category(categoryCode, categoryName);
+				
 				product = new Product(code, name, quantity, price, manufacturingDate);
+				product.setCategory(productCategory);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -141,7 +154,11 @@ public class OracleProductDAO implements ProductDAO {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionManager.getInstance().getConnection();
-			stmt = connection.prepareStatement("SELECT * FROM T_PRODUTO");
+			
+			String sql = "SELECT * FROM T_PRODUTO P INNER JOIN T_CATEGORIA C " +
+					     "ON (P.cd_categoria = C.cd_categoria)";
+			
+			stmt = connection.prepareStatement(sql);
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
@@ -153,7 +170,14 @@ public class OracleProductDAO implements ProductDAO {
 				Calendar manufacturingDate = Calendar.getInstance();
 				manufacturingDate.setTimeInMillis(manufacturingDateResponse.getTime());
 				
+				int categoryCode = rs.getInt("cd_categoria");
+				String categoryName = rs.getString("nm_categoria");
+			
+				Category productCategory = new Category(categoryCode, categoryName);
+				
 				Product product = new Product(code, name, quantity, price, manufacturingDate);
+				
+				product.setCategory(productCategory);
 				
 				list.add(product);
 			}

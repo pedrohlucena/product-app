@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.fiap.store.bean.Category;
 import br.com.fiap.store.bean.Product;
+import br.com.fiap.store.dao.CategoryDAO;
 import br.com.fiap.store.dao.ProductDAO;
 import br.com.fiap.store.exception.DBException;
 import br.com.fiap.store.factory.DAOFactory;
@@ -20,12 +22,14 @@ import br.com.fiap.store.factory.DAOFactory;
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private ProductDAO dao;
+	private ProductDAO productDao;
+	private CategoryDAO categoryDao;
 
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		dao = DAOFactory.getProdutoDAO();
+		productDao = DAOFactory.getProductDAO();
+		categoryDao = DAOFactory.getCategoryDAO();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,10 +41,10 @@ public class ProductServlet extends HttpServlet {
 			list(request, response);
 			break;
 		case "open-edition-form":
-			int id = Integer.parseInt(request.getParameter("code"));
-			Product productToBeUpdated = dao.fetchById(id);
-			request.setAttribute("product", productToBeUpdated);
-			request.getRequestDispatcher("product-edit.jsp").forward(request, response);
+			openEditionForm(request, response);
+			break;
+		case "open-registration-form":
+			openRegistrationForm(request, response);
 			break;
 		}
 	}
@@ -48,7 +52,7 @@ public class ProductServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String action = request.getParameter("action");
-		
+
 		switch (action) {
 		case "save":
 			save(request, response);
@@ -61,9 +65,8 @@ public class ProductServlet extends HttpServlet {
 			break;
 		}
 	}
-	
-	private void save(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+
+	private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			String name = request.getParameter("name");
 			int quantity = Integer.parseInt(request.getParameter("quantity"));
@@ -72,10 +75,16 @@ public class ProductServlet extends HttpServlet {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar manufacturingDate = Calendar.getInstance();
 			manufacturingDate.setTime(formatter.parse(request.getParameter("manufacturing-date")));
+			
+			int categoryCode = Integer.valueOf(request.getParameter("category"));
+			
+			Category productCategory = new Category();
+			productCategory.setCode(categoryCode);
 
 			Product product = new Product(name, quantity, value, manufacturingDate);
+			product.setCategory(productCategory);
 
-			dao.save(product);
+			productDao.save(product);
 			request.setAttribute("message", "Produto cadastrado!");
 		} catch (DBException e) {
 			e.printStackTrace();
@@ -84,57 +93,80 @@ public class ProductServlet extends HttpServlet {
 			e.printStackTrace();
 			request.setAttribute("error", "Por favor, valide os dados.");
 		}
-		request.getRequestDispatcher("product-registration.jsp").forward(request, response);
+		openRegistrationForm(request, response);
 	}
 
 	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int code = Integer.parseInt(request.getParameter("code"));
-		Product productToBeEdited = dao.fetchById(code);
+		int productCode = Integer.parseInt(request.getParameter("code"));
+		Product productToBeEdited = productDao.fetchById(productCode);
 		try {
-			String name = request.getParameter("name");
-			int quantity = Integer.parseInt(request.getParameter("quantity"));
-			double value = Double.parseDouble(request.getParameter("value"));
-
+			int categoryCode = Integer.valueOf(request.getParameter("category"));
+			String productName = request.getParameter("name");
+			int productQuantity = Integer.parseInt(request.getParameter("quantity"));
+			double productPrice = Double.parseDouble(request.getParameter("value"));
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-			Calendar manufacturingDate = Calendar.getInstance();
-			manufacturingDate.setTime(formatter.parse(request.getParameter("manufacturing-date")));
-
-			productToBeEdited.setName(name);
-			productToBeEdited.setQuantity(quantity);
-			productToBeEdited.setPrice(value);
-			productToBeEdited.setManufacturingDate(manufacturingDate);
-
-			dao.update(productToBeEdited);
+			Calendar productManufacturingDate = Calendar.getInstance();
+			productManufacturingDate.setTime(formatter.parse(request.getParameter("manufacturing-date")));
+			
+			Category productCategory = new Category();
+			productCategory.setCode(categoryCode);
+			
+			productToBeEdited = new Product(productCode, productName, productQuantity, productPrice, productManufacturingDate);
+			productToBeEdited.setCategory(productCategory);
+			productDao.update(productToBeEdited);
+					
 			request.setAttribute("message", "Produto atualizado!");
 			list(request, response);
 		} catch (DBException e) {
 			e.printStackTrace();
 			request.setAttribute("error", "Erro ao atualizar o produto.");
 			request.setAttribute("product", productToBeEdited);
+			loadCategoryOptions(request);
 			request.getRequestDispatcher("product-edit.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("error", "Por favor, valide os dados.");
 			request.setAttribute("product", productToBeEdited);
+			loadCategoryOptions(request);
 			request.getRequestDispatcher("product-edit.jsp").forward(request, response);
 		}
 	}
-	
+
 	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Product> productList = dao.list();
+		List<Product> productList = productDao.list();
 		request.setAttribute("products", productList);
 		request.getRequestDispatcher("product-list.jsp").forward(request, response);
 	}
-	
+
 	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int id = Integer.parseInt(request.getParameter("code"));
 		try {
-			dao.remove(id);
+			productDao.remove(id);
 			request.setAttribute("message", "Produto removido!");
 		} catch (DBException e) {
 			e.printStackTrace();
 			request.setAttribute("error", "Erro ao remover o produto.");
 		}
 		list(request, response);
+	}
+	
+	protected void openRegistrationForm(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		loadCategoryOptions(request);
+		request.getRequestDispatcher("product-registration.jsp").forward(request, response);
+	}
+	
+	protected void openEditionForm(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		int id = Integer.parseInt(request.getParameter("code"));
+		Product productToBeUpdated = productDao.fetchById(id);
+		request.setAttribute("product", productToBeUpdated);
+		loadCategoryOptions(request);
+		request.getRequestDispatcher("product-edit.jsp").forward(request, response);
+	}
+
+	private void loadCategoryOptions(HttpServletRequest request) {
+		List<Category> categoryList = categoryDao.list();
+		request.setAttribute("categories", categoryList);
 	}
 }

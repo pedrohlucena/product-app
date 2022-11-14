@@ -10,6 +10,7 @@ public class Product implements Serializable {
 	private String name;
 	private int quantity;
 	private double price;
+	private Category category;
 	private Calendar manufacturingDate;
 	
 	public Product() {}
@@ -66,5 +67,13 @@ public class Product implements Serializable {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 }

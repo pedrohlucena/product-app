@@ -10,7 +10,7 @@ import br.com.fiap.store.factory.DAOFactory;
 
 public class ProductDAOTest {
 	public static void main(String[] args) {
-		ProductDAO dao = DAOFactory.getProdutoDAO();
+		ProductDAO dao = DAOFactory.getProductDAO();
 		
 		Product product = new Product("Caderno", 100, 20, Calendar.getInstance());
 		

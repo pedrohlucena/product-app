@@ -39,6 +39,19 @@
 					class="form-control mb-3"
 					value='<fmt:formatDate value="${product.manufacturingDate.time}" pattern="dd/MM/yyyy"/>'>
 			</div>
+			<div class="form-group">
+				<label for="id-categoria">Categoria</label>
+				<select class="form-select mb-3 form-control" aria-label="Default select example" id="id-categoria" name="category"> 
+				  <c:forEach items="${categories}" var="category">
+				  		<c:if test="${product.category.code == category.code}">
+				  			<option value="${category.code}" selected>${category.name}</option>
+				  		</c:if>u
+				  		<c:if test="${product.category.code != category.code}">
+				  			<option value="${category.code}">${category.name}</option>
+				  		</c:if>
+				  </c:forEach>
+				</select>			
+			</div>
 			<input type="submit" value="Salvar" class="btn btn-primary">
 			<a href="product?action=list" class="btn btn-danger">Cancelar</a>
 		</form>

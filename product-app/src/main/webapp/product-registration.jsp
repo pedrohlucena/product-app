@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,6 +32,17 @@
 			<div class="form-group">
 				<label for="id-data-fabricacao">Data de fabricação</label> <input type="date" name="manufacturing-date"
 					id="id-data-fabricacao" class="form-control mb-3">
+			</div>
+			
+			<div class="form-group">
+				<label for="id-categoria">Categoria</label>
+				<select class="form-select mb-3 form-control" aria-label="Default select example" id="id-categoria" name="category">
+				  <option selected value="0">Selecione uma categoria para seu produto</option>
+				  
+				  <c:forEach items="${categories}" var="category">
+				  		<option value="${category.code}">${category.name}</option>
+				  </c:forEach>
+				</select>			
 			</div>
 			<input type="submit" value="Salvar" class="btn btn-primary">
 		</form>
