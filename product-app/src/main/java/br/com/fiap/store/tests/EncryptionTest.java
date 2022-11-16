@@ -6,7 +6,7 @@ public class EncryptionTest {
 
 	public static void main(String[] args) {
 		try {
-			String password = "banAna123!";
+			String password = "abc123456";
 			String hashedPassword = Encryption.encrypt(password);
 			System.out.println(password + " " + hashedPassword);
 		} catch (Exception e) {

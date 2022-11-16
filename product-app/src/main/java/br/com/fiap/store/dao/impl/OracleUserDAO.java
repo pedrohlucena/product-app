@@ -10,21 +10,20 @@ import br.com.fiap.store.dao.UserDAO;
 import br.com.fiap.store.singleton.ConnectionManager;
 
 public class OracleUserDAO implements UserDAO {
-	private Connection connection;
 	
+	private Connection connection;
+
 	@Override
 	public boolean validateUser(User user) {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
 			connection = ConnectionManager.getInstance().getConnection();
-			stmt = connection.prepareStatement("SELECT * FROM T_USUARIO WHERE ds_email = ? AND ds_senha = ?");
-			stmt.setString(1, user.getEmail());
-			stmt.setString(2, user.getPassword());
+			stmt = connection.prepareStatement("SELECT * FROM T_USUARIO");
 			rs = stmt.executeQuery();
 			
-			if (rs.next()) { return true; };
-		} catch (SQLException e) {
+			System.out.println(rs.next());
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
@@ -37,4 +36,5 @@ public class OracleUserDAO implements UserDAO {
 		}
 		return false;
 	}
+
 }

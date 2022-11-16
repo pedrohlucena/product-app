@@ -19,11 +19,11 @@ public class User implements Serializable {
 	}
 
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 
 	public void setEmail(String email) {
