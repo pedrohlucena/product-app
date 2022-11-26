@@ -19,10 +19,19 @@ public class OracleUserDAO implements UserDAO {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionManager.getInstance().getConnection();
-			stmt = connection.prepareStatement("SELECT * FROM T_USUARIO");
+			stmt = connection.prepareStatement("SELECT ds_email, ds_senha FROM T_USUARIO WHERE ds_email = ? AND ds_senha = ?");
+			
+			stmt.setString(1, user.getEmail());
+			stmt.setString(2, user.getPassword());
+			
 			rs = stmt.executeQuery();
 			
-			System.out.println(rs.next());
+			boolean thereIsARecord = rs.next();
+			System.out.println(thereIsARecord);
+			
+			if(thereIsARecord)
+				return true;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

@@ -56,3 +56,6 @@ INCREMENT BY 1;
 ALTER TABLE T_PRODUTO 
     ADD CONSTRAINT cd_categoria FOREIGN KEY (cd_categoria) 
     REFERENCES T_CATEGORIA(cd_categoria);
+    
+INSERT INTO T_USUARIO 
+    VALUES ('abc@gmail.com', 'e10adc3949ba59abbe56e057f20f883e');    

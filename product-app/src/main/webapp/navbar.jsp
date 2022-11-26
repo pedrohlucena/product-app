@@ -15,9 +15,11 @@
         </li>
       </ul>
       <c:if test="${empty user}">
+	   	  <c:if test="${not empty error}">
 		      <span class="navbar-text text-danger" style="margin-right:10px">
-		      	${error}
+		     	${error}
 		      </span>
+	   	  </c:if>
 	      <form class="form-inline my-2 my-lg-0" action="login" method="post">
 	      	  <div class="input-group">
 			  	<input type="email" class="form-control" placeholder="E-mail" aria-label="Recipient's username" aria-describedby="basic-addon2" name="email">
