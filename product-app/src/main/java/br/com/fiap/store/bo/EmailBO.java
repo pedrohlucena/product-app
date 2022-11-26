@@ -2,7 +2,6 @@ package br.com.fiap.store.bo;
 
 import java.util.Properties;
 
-import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -15,22 +14,20 @@ import br.com.fiap.store.exception.EmailException;
 
 public class EmailBO {
 	public void sendEmail(String receiver, String subject, String message) throws EmailException {
-		final String emailSender = "pedrohlucena413@gmail.com";
-		final String password = "Adorolasanha413!";
+		final String emailSender = "user";
+		final String password = "pass";
 
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
-		
-		Authenticator authenticator = new javax.mail.Authenticator() {
+
+		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(emailSender, password);
 			}
-		  };
-
-		Session session = Session.getInstance(props, authenticator);
+		  });
 		  
 		try {
 			Message email = new MimeMessage(session);
@@ -41,7 +38,7 @@ public class EmailBO {
 
 			Transport.send(email);
 		} catch (MessagingException e) {
-			throw new EmailException("Erro ao enviar o e-mail");
+			e.printStackTrace();
 		}
 	}
 }

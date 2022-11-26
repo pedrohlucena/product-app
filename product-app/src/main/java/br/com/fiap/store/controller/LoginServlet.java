@@ -29,9 +29,9 @@ public class LoginServlet extends HttpServlet {
 	}
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		HttpSession session = request.getSession();
-//		session.setAttribute("user", null);
-//		request.getRequestDispatcher("home.jsp").forward(request, response);
+		HttpSession session = request.getSession();
+		session.setAttribute("user", null);
+		request.getRequestDispatcher("home.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,6 +47,7 @@ public class LoginServlet extends HttpServlet {
 				emailBo.sendEmail(email, "Login Realizado", "Um login foi realizado");
 			} catch (EmailException e) {
 				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 		} else {
 			request.setAttribute("error", "Usuário e/ou senha inválidos");

@@ -26,10 +26,7 @@ public class OracleUserDAO implements UserDAO {
 			
 			rs = stmt.executeQuery();
 			
-			boolean thereIsARecord = rs.next();
-			System.out.println(thereIsARecord);
-			
-			if(thereIsARecord)
+			if(rs.next())
 				return true;
 			
 		} catch (Exception e) {
