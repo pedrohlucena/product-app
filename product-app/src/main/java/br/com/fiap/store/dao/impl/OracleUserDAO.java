@@ -10,15 +10,12 @@ import br.com.fiap.store.dao.UserDAO;
 import br.com.fiap.store.singleton.ConnectionManager;
 
 public class OracleUserDAO implements UserDAO {
-	
-	private Connection connection;
-
 	@Override
 	public boolean validateUser(User user) {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
+		Connection connection = ConnectionManager.getInstance().getConnection();
 		try {
-			connection = ConnectionManager.getInstance().getConnection();
 			stmt = connection.prepareStatement("SELECT ds_email, ds_senha FROM T_USUARIO WHERE ds_email = ? AND ds_senha = ?");
 			
 			stmt.setString(1, user.getEmail());

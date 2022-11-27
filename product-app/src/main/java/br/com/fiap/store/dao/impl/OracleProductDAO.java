@@ -15,12 +15,12 @@ import br.com.fiap.store.exception.DBException;
 import br.com.fiap.store.singleton.ConnectionManager;
 
 public class OracleProductDAO implements ProductDAO {
+	
 	private Connection connection;
 	
 	@Override
 	public void save(Product product) throws DBException {
 		PreparedStatement stmt = null;
-
 		try {
 			connection = ConnectionManager.getInstance().getConnection();
 			String sql = "INSERT INTO T_PRODUTO (cd_produto, nm_produto, qt_produto, vl_produto, dt_fabricacao, cd_categoria) VALUES (SQ_T_PRODUTO.nextval, ?, ?, ?, ?, ?)";
@@ -49,7 +49,7 @@ public class OracleProductDAO implements ProductDAO {
 	@Override
 	public void update(Product product) throws DBException {
 		PreparedStatement stmt = null;
-
+		
 		try {
 			connection = ConnectionManager.getInstance().getConnection();
 			String sql = "UPDATE T_PRODUTO SET nm_produto = ?, qt_produto = ?, vl_produto = ?, dt_fabricacao = ?, cd_categoria = ?  WHERE cd_produto = ?";
@@ -80,7 +80,6 @@ public class OracleProductDAO implements ProductDAO {
 	@Override
 	public void remove(int code) throws DBException {
 			PreparedStatement stmt = null;
-
 			try {
 				connection = ConnectionManager.getInstance().getConnection();
 				String sql = "DELETE FROM T_PRODUTO WHERE cd_produto = ?";
@@ -154,7 +153,6 @@ public class OracleProductDAO implements ProductDAO {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionManager.getInstance().getConnection();
-			
 			String sql = "SELECT * FROM T_PRODUTO P INNER JOIN T_CATEGORIA C " +
 					     "ON (P.cd_categoria = C.cd_categoria)";
 			

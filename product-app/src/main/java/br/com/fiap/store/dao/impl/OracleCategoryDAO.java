@@ -12,15 +12,13 @@ import br.com.fiap.store.dao.CategoryDAO;
 import br.com.fiap.store.singleton.ConnectionManager;
 
 public class OracleCategoryDAO implements CategoryDAO {
-	private Connection connection;
-
 	@Override
 	public List<Category> list() {
 		List<Category> list = new ArrayList<Category>();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
+		Connection connection = ConnectionManager.getInstance().getConnection();
 		try {
-			connection = ConnectionManager.getInstance().getConnection();
 			stmt = connection.prepareStatement("SELECT * FROM T_CATEGORIA");
 			rs = stmt.executeQuery();
 
