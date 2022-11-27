@@ -11,11 +11,15 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import br.com.fiap.store.exception.EmailException;
+import br.com.fiap.store.utils.DotEnvManager;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class EmailBO {
 	public void sendEmail(String receiver, String subject, String message) throws EmailException {
-		final String emailSender = "user";
-		final String password = "pass";
+		Dotenv dotenv = DotEnvManager.getEnvVars();
+		
+		final String emailSender = dotenv.get("EMAIL_SENDER_LOGIN");
+		final String password = dotenv.get("EMAIL_SENDER_PASSWORD");
 
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -38,7 +42,7 @@ public class EmailBO {
 
 			Transport.send(email);
 		} catch (MessagingException e) {
-			e.printStackTrace();
+			throw new EmailException();
 		}
 	}
 }
